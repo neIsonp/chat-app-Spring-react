@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -24,5 +25,16 @@ public class TokenProvider {
 
     return jwt;
   }
+
+  public String getEmailFromToken(String jwt){
+    jwt = jwt.substring(7);
+
+    Claims claim = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+            
+    String email =  String.valueOf(claim.get("email"));
+
+    return email;
+  }
+
   
 }
