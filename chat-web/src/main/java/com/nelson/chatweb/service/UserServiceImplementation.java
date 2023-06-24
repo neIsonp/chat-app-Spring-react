@@ -3,6 +3,9 @@ package com.nelson.chatweb.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.authentication.BadCredentialsException;
+
+import com.nelson.chatweb.config.TokenProvider;
 import com.nelson.chatweb.exception.UserException;
 import com.nelson.chatweb.model.User;
 import com.nelson.chatweb.repository.UserRepository;
@@ -12,9 +15,11 @@ public class UserServiceImplementation implements UserService{
 
 
   private UserRepository userRepository;
+  private TokenProvider tokenProvider;
 
-  public UserServiceImplementation(UserRepository userRepository){
+  public UserServiceImplementation(UserRepository userRepository, TokenProvider tokenProvider){
     this.userRepository = userRepository;
+    this.tokenProvider = tokenProvider;
   }
 
   @Override
@@ -29,9 +34,21 @@ public class UserServiceImplementation implements UserService{
   }
 
   @Override
-  public User findUserProfile(String jwt) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findUserProfile'");
+  public User findUserProfile(String jwt) throws UserException{
+
+    String email = tokenProvider.getEmailFromToken(jwt);
+
+    if(email == null){
+      throw new BadCredentialsException("received invalid token ");
+    }
+
+    User user = userRepository.findByEmail(email);
+
+    if(user == null){
+      throw new UserException("User not found with email" + email);
+    }
+    
+    return user;
   }
 
   @Override
