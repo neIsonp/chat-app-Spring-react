@@ -5,15 +5,14 @@ import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.mapping.Collection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,7 +26,7 @@ public class AppConfig {
           .and().authorizeRequests(authorize -> authorize
               .antMatchers("/api/**").authenticated()
               .anyRequest().permitAll())
-          .addFilterBefore(null, null)
+          .addFilterBefore(new JwtTokenValitador(), BasicAuthenticationFilter.class)
           .csrf().disable()
           .cors().configurationSource(new CorsConfigurationSource() {
               @Override
@@ -51,10 +50,9 @@ public class AppConfig {
 
       return http.build();
   }
+  
   @Bean
   public PasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
   }
-
-  
 }
