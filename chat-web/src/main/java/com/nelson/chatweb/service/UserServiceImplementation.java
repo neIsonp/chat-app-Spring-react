@@ -69,8 +69,7 @@ public class UserServiceImplementation implements UserService{
 
   @Override
   public List<User> searchUser(String query) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'searchUser'");
+    List<User> users = userRepository.searchUser(query);
+    return users;
   }
-  
 }
