@@ -53,8 +53,18 @@ public class UserServiceImplementation implements UserService{
 
   @Override
   public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+    User user = findUserById(userId);
+
+    if(req.getFull_name() != null){
+      user.setFullName(req.getFull_name());
+    }
+
+    if(req.getProfile_picture() != null){
+      user.setProfilePicture(req.getProfile_picture());
+    }
+
+    return userRepository.save(user);
+
   }
 
   @Override
