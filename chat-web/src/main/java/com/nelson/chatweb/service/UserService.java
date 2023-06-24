@@ -8,7 +8,7 @@ import com.nelson.chatweb.request.UpdateUserRequest;
 
 public interface UserService {
 
-  public User findUserById(Integer id);
+  public User findUserById(Integer id) throws UserException;
 
   public User findUserProfile(String jwt);
 
