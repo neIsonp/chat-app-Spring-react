@@ -2,10 +2,8 @@ package com.nelson.chatweb.controller;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.web.server.ServerHttpSecurity.HttpsRedirectSpec;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nelson.chatweb.exception.UserException;
 import com.nelson.chatweb.model.User;
-import com.nelson.chatweb.repository.UserRepository;
 import com.nelson.chatweb.request.UpdateUserRequest;
 import com.nelson.chatweb.response.ApiResponse;
 import com.nelson.chatweb.service.UserService;
