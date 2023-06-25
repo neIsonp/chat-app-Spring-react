@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -19,7 +19,7 @@ public class TokenProvider {
   public String generateToken(Authentication authentication){
     String jwt = Jwts.builder().setIssuer("Nelson here")
     .setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime() + 86400000))
-    .claim("email", authentication.getUsername())
+    .claim("email", authentication.getName())
     .signWith(key)
     .compact();
 
