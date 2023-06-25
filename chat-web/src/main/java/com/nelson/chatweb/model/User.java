@@ -13,20 +13,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String fullName;
+    private String full_name;
     private String email;
-    private String profilePicture;
+    private String profile_picture;
     private String password;
 
     public User() {
     }
 
-    public User(Integer id,String fullName, String email, String profilePicture, String password) {
+    public User(Integer id,String full_name, String email, String profile_picture, String password) {
         super();
         this.id = id;
-        this.fullName = fullName;
+        this.full_name = full_name;
         this.email = email;
-        this.profilePicture = profilePicture;
+        this.profile_picture = profile_picture;
         this.password = password;
     }
 
@@ -38,12 +38,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFull_name() {
+        return full_name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public String getEmail() {
@@ -54,12 +54,12 @@ public class User {
         this.email = email;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
+    public String getprofile_picture() {
+        return profile_picture;
     }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setprofile_picture(String profile_picture) {
+        this.profile_picture = profile_picture;
     }
 
     public String getPassword() {
