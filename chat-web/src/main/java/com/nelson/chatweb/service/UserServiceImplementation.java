@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Service;
 
 import com.nelson.chatweb.config.TokenProvider;
 import com.nelson.chatweb.exception.UserException;
@@ -11,6 +12,7 @@ import com.nelson.chatweb.model.User;
 import com.nelson.chatweb.repository.UserRepository;
 import com.nelson.chatweb.request.UpdateUserRequest;
 
+@Service
 public class UserServiceImplementation implements UserService{
 
 
@@ -56,11 +58,11 @@ public class UserServiceImplementation implements UserService{
     User user = findUserById(userId);
 
     if(req.getFull_name() != null){
-      user.setFullName(req.getFull_name());
+      user.setFull_name(req.getFull_name());
     }
 
     if(req.getProfile_picture() != null){
-      user.setProfilePicture(req.getProfile_picture());
+      user.setprofile_picture(req.getProfile_picture());
     }
 
     return userRepository.save(user);
@@ -72,4 +74,5 @@ public class UserServiceImplementation implements UserService{
     List<User> users = userRepository.searchUser(query);
     return users;
   }
+
 }
