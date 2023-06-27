@@ -14,8 +14,7 @@ import com.nelson.chatweb.request.UpdateUserRequest;
 
 @Service
 public class UserServiceImplementation implements UserService{
-
-
+  
   private UserRepository userRepository;
   private TokenProvider tokenProvider;
 
@@ -62,7 +61,7 @@ public class UserServiceImplementation implements UserService{
     }
 
     if(req.getProfile_picture() != null){
-      user.setprofile_picture(req.getProfile_picture());
+      user.setProfile_picture(req.getProfile_picture());
     }
 
     return userRepository.save(user);

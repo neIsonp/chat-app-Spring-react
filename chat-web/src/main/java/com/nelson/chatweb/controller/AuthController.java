@@ -1,6 +1,5 @@
 package com.nelson.chatweb.controller;
 
-import org.springframework.beans.factory.xml.PluggableSchemaResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.nelson.chatweb.config.TokenProvider;
 import com.nelson.chatweb.exception.UserException;
 import com.nelson.chatweb.model.User;
@@ -67,7 +65,7 @@ public class AuthController {
     return new ResponseEntity<AuthResponse>(response, HttpStatus.ACCEPTED);
 
   }
-
+  
   public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest req){
     String email = req.getEmail();
     String password = req.getPassword();
@@ -80,7 +78,6 @@ public class AuthController {
     AuthResponse response = new AuthResponse(jwt, true);
 
     return new ResponseEntity<AuthResponse>(response, HttpStatus.ACCEPTED);
-
   }
 
   public Authentication authenticate(String username, String password){
