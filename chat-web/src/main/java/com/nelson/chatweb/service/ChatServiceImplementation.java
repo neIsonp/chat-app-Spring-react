@@ -105,13 +105,23 @@ public class ChatServiceImplementation implements ChatService {
   }
 
   @Override
-  public Chat renameGroup(Integer chatId, String groupName, Integer reqUserId) throws ChatException, UserException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'renameGroup'");
+  public Chat renameGroup(Integer chatId, String groupName, User reqUser) throws ChatException, UserException {
+     Optional<Chat> opt = chatRepository.findById(chatId);
+
+     if(opt.isPresent()){
+      Chat chat = opt.get();
+      if(chat.getUsers().contains(reqUser)){
+        chat.setChat_name(groupName);
+        return chatRepository.save(chat);
+      }
+        throw new UserException("You aren't not member o this group");
+     }
+
+    throw new ChatException("Chat not found with id" + chatId);
   }
 
   @Override
-  public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUser) throws UserException, ChatException {
+  public Chat removeFromGroup(Integer chatId, Integer userId, User reqUser) throws UserException, ChatException {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'removeFromGroup'");
   }
