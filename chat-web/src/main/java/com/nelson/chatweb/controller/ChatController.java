@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nelson.chatweb.exception.UserException;
 import com.nelson.chatweb.model.Chat;
 import com.nelson.chatweb.model.User;
+import com.nelson.chatweb.request.GroupChatRequest;
 import com.nelson.chatweb.request.SingleChatRequest;
 import com.nelson.chatweb.service.ChatService;
 import com.nelson.chatweb.service.UserService;
@@ -35,7 +36,18 @@ public class ChatController {
     Chat chat = chatService.createChat(reqUser, singleChatRequest.getUserId());
 
     return new ResponseEntity<Chat>(chat,HttpStatus.OK);
-    
+
+  }
+
+  @PostMapping("/group")
+  public ResponseEntity<Chat> createGroupHandler(@RequestBody GroupChatRequest req, @RequestHeader("Authorization") String jwt) throws UserException{
+
+    User reqUser = userService.findUserProfile(jwt);
+
+    Chat chat = chatService.createChat(reqUser, req.getUserId());
+
+    return new ResponseEntity<Chat>(chat,HttpStatus.OK);
+
   }
 
 }
