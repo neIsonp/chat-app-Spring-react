@@ -16,7 +16,7 @@ public interface ChatService {
 
   public List<Chat> findAllChatByUserId(Integer userId) throws UserException;
 
-  public Chat createGroup(GroupChatRequest req, Integer reqUserId) throws UserException;
+  public Chat createGroup(GroupChatRequest req, User reqUser) throws UserException;
 
   public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException;
 

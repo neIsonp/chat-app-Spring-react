@@ -1,6 +1,7 @@
 package com.nelson.chatweb.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -45,26 +46,53 @@ public class ChatServiceImplementation implements ChatService {
 
   @Override
   public Chat findChatById(Integer chatId) throws ChatException {
-    
-    return null;
+    Optional<Chat> chat = chatRepository.findById(chatId);
+
+    if(chat.isPresent()){
+      return chat.get();
+    }
+
+    throw new ChatException("Char not dound with id " + chatId);
   }
 
   @Override
   public List<Chat> findAllChatByUserId(Integer userId) throws UserException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findAllChatByUserId'");
+    User user = userService.findUserById(userId);
+
+    List<Chat> chats = chatRepository.findChatByUserId(user.getId());
+
+    return chats;
   }
 
   @Override
-  public Chat createGroup(GroupChatRequest req, Integer reqUserId) throws UserException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'createGroup'");
+  public Chat createGroup(GroupChatRequest req, User reqUser) throws UserException {
+
+    Chat group = new Chat();
+    group.setIsGroup(true);
+    group.setChat_image(req.getChat_image());
+    group.setChat_name(req.getChat_name());
+    group.setcreatedBy(reqUser);
+
+    for(Integer userId: req.getUserId()){
+      User user = userService.findUserById(userId);
+      group.getUsers().add(user);
+    }
+
+    return group;
   }
 
   @Override
   public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'addUserToGroup'");
+    Optional<Chat> chat = chatRepository.findById(chatId);
+
+    User user = userService.findUserById(userId);
+
+    if(chat.isPresent()){
+      chat.get().getUsers().add(user);
+    }
+
+    throw new ChatException("Chat not found with id" + chatId);
+
   }
 
   @Override
