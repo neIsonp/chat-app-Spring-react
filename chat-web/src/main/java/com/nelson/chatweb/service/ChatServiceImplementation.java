@@ -94,7 +94,7 @@ public class ChatServiceImplementation implements ChatService {
 
       if(chat.getAdmins().contains(reqUser)){
         chat.getUsers().add(user);
-        return chat;
+        return chatRepository.save(chat);
       }else{
         throw new UserException("You are not admin");
       }
@@ -122,8 +122,32 @@ public class ChatServiceImplementation implements ChatService {
 
   @Override
   public Chat removeFromGroup(Integer chatId, Integer userId, User reqUser) throws UserException, ChatException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'removeFromGroup'");
+    Optional<Chat> opt = chatRepository.findById(chatId);
+
+    User user = userService.findUserById(userId);
+
+    if(opt.isPresent()){
+
+      Chat chat = opt.get();
+
+      if(chat.getAdmins().contains(reqUser)){
+        chat.getUsers().remove(user);
+        return chatRepository.save(chat);
+
+      }else if(chat.getUsers().contains(reqUser)){
+
+        if(user.getId().equals(reqUser.getId())){
+            chat.getUsers().remove(user);
+            return chatRepository.save(chat);
+        }
+
+      }
+      
+      throw new UserException("You can't remove another user");
+      
+    }
+
+    throw new ChatException("Chat not found with id" + chatId);
   }
 
   @Override
