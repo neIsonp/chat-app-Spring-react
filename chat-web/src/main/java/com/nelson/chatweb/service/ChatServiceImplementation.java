@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.nelson.chatweb.exception.ChatException;
 import com.nelson.chatweb.exception.UserException;
 import com.nelson.chatweb.model.Chat;
+import com.nelson.chatweb.model.User;
 import com.nelson.chatweb.repository.ChatRepository;
 import com.nelson.chatweb.request.GroupChatRequest;
 
@@ -19,13 +20,33 @@ public class ChatServiceImplementation implements ChatService {
 
   public ChatServiceImplementation(ChatRepository chatRepository, UserService userService){
     this.chatRepository = chatRepository;
-    this.userService = userService;
+    this.userService = userService; 
   }
 
   @Override
-  public Chat createChat(Integer reqUser, Integer userId2) throws UserException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'createChat'");
+  public Chat createChat(User reqUser, Integer userId2) throws UserException {
+
+    User user = userService.findUserById(userId2);
+    
+    Chat isChatExist = chatRepository.findSingleChatByUsersIds(user, reqUser);
+
+    if(isChatExist != null){
+      return isChatExist;
+    }
+
+    Chat chat = new Chat();
+    chat.setcreatedBy(reqUser);
+    chat.getUsers().add(user);
+    chat.getUsers().add(reqUser);
+    chat.setIsGroup(false);
+     
+    return chat;
+  }
+
+  @Override
+  public Chat findChatById(Integer chatId) throws ChatException {
+    
+    return null;
   }
 
   @Override
@@ -63,5 +84,7 @@ public class ChatServiceImplementation implements ChatService {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'deleteChat'");
   }
+
+ 
 
 }

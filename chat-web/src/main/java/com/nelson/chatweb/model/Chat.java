@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,13 +22,14 @@ public class Chat {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
+
   private String chat_name;
   private String chat_image;
 
-  @Column(name = "is_group")
+  @JoinColumn(name = "is_group")
   private boolean isGroup;
 
-  @Column(name = "created_by")
+  @JoinColumn(name = "created_by")
   @ManyToOne
   private User createdBy;
 
@@ -86,11 +88,11 @@ public class Chat {
     this.isGroup = isGroup;
   }
 
-  public User getCreatedBy() {
+  public User getcreatedBy() {
     return this.createdBy;
   }
 
-  public void setCreatedBy(User createdBy) {
+  public void setcreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
 
