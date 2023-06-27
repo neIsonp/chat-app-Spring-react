@@ -18,7 +18,7 @@ public interface ChatService {
 
   public Chat createGroup(GroupChatRequest req, User reqUser) throws UserException;
 
-  public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException;
+  public Chat addUserToGroup(Integer userId, Integer chatId, User reqUser)  throws UserException, ChatException;
 
   public Chat renameGroup(Integer chatId, String groupName, Integer reqUserId) throws ChatException, UserException;
 
