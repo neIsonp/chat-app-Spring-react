@@ -72,6 +72,7 @@ public class ChatServiceImplementation implements ChatService {
     group.setChat_image(req.getChat_image());
     group.setChat_name(req.getChat_name());
     group.setcreatedBy(reqUser);
+    group.getAdmins().add(reqUser);
 
     for(Integer userId: req.getUserId()){
       User user = userService.findUserById(userId);
@@ -82,13 +83,21 @@ public class ChatServiceImplementation implements ChatService {
   }
 
   @Override
-  public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
-    Optional<Chat> chat = chatRepository.findById(chatId);
+  public Chat addUserToGroup(Integer userId, Integer chatId, User reqUser) throws UserException, ChatException {
+    Optional<Chat> opt = chatRepository.findById(chatId);
 
     User user = userService.findUserById(userId);
 
-    if(chat.isPresent()){
-      chat.get().getUsers().add(user);
+    if(opt.isPresent()){
+
+      Chat chat = opt.get();
+
+      if(chat.getAdmins().contains(reqUser)){
+        chat.getUsers().add(user);
+        return chat;
+      }else{
+        throw new UserException("You are not admin");
+      }
     }
 
     throw new ChatException("Chat not found with id" + chatId);
