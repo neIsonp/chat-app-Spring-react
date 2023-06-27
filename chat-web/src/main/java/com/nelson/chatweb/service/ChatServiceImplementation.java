@@ -152,10 +152,6 @@ public class ChatServiceImplementation implements ChatService {
 
   @Override
   public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteChat'");
+
   }
-
- 
-
 }
