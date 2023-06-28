@@ -14,8 +14,6 @@ public interface UserService {
 
   public User updateUser(Integer userId, UpdateUserRequest req) throws UserException;
 
-  //estou apenas testando uma coisa
   public List<User> searchUser(String query);
 
-  
 }
