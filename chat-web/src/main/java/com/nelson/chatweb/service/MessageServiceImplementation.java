@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.nelson.chatweb.exception.ChatException;
 import com.nelson.chatweb.exception.MessageException;
 import com.nelson.chatweb.exception.UserException;
@@ -13,6 +15,7 @@ import com.nelson.chatweb.model.User;
 import com.nelson.chatweb.repository.MessageRepository;
 import com.nelson.chatweb.request.SendMessageRequest;
 
+@Service
 public class MessageServiceImplementation implements MessageService{
 
   private MessageRepository messageRepository;
