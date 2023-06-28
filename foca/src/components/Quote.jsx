@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const Quote = styled.h5`
   cursor: pointer;
   font-family: 'Super Glue', sans-serif;
-  color: black;
+  color: white;
   font-size: 19px;
 
 

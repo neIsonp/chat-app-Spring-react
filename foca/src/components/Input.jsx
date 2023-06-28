@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 export default function Input({ type, placeholder }) {
   return <StyledInput type={type} placeholder={placeholder} />;
 }
@@ -24,8 +23,8 @@ const StyledInput = styled.input`
     backdrop-filter: blur(12rem);
     
   }
-  /* &::placeholder {
+  &::placeholder {
     color: #b9abe099;
     font-size: 1rem;
-  } */
+  }
 `;

@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 
-export const  MainContainer = styled.div`
+export const MainContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   width: 30vw;
   height: 80vh;
+  border: 5px solid #E89FFF;
   background: rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(8.5px);
@@ -50,18 +51,16 @@ export const  MainContainer = styled.div`
   @media only screen and (min-width: 1024px) {
     width: 48vw;
     height: 90vh;
-
   }
 
   @media only screen and (min-width: 1280px) {
     width: 30vw;
     height: 90vh;
-
   }
 
   @media only screen and (min-width: 1500px) {
     width: 32vw;
     height: 90vh;
   }
-  
+
 `;
