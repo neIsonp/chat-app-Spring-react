@@ -25,5 +25,4 @@ public interface ChatService {
   public Chat removeFromGroup(Integer chatId, Integer userId, User reqUser) throws UserException, ChatException;
  
   public void deleteChat(Integer chatId, Integer userId) throws ChatException, UserException;
-  
 }
