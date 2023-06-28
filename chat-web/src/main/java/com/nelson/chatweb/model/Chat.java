@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,13 +22,18 @@ public class Chat {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
+
   private String chat_name;
   private String chat_image;
 
-  @Column(name = "is_group")
+
+   @ManyToMany
+  private Set<User> admins = new HashSet<>();
+
+  @JoinColumn(name = "is_group")
   private boolean isGroup;
 
-  @Column(name = "created_by")
+  @JoinColumn(name = "created_by")
   @ManyToOne
   private User createdBy;
 
@@ -40,7 +46,7 @@ public class Chat {
   public Chat() {
   }
 
-  public Chat(Integer id, String chat_name, String chat_image, boolean isGroup, User createdBy, Set<User> users, List<Message> messages) {
+  public Chat(Integer id, String chat_name, String chat_image, boolean isGroup, User createdBy, Set<User> users, List<Message> messages, Set<User> admins) {
     this.id = id;
     this.chat_name = chat_name;
     this.chat_image = chat_image;
@@ -48,6 +54,16 @@ public class Chat {
     this.createdBy = createdBy;
     this.users = users;
     this.messages = messages;
+    this.admins = admins;
+  }
+
+
+  public Set<User> getAdmins() {
+    return this.admins;
+  }
+
+  public void setAdmins(Set<User> admins) {
+    this.admins = admins;
   }
 
   public Integer getId() {
@@ -86,11 +102,11 @@ public class Chat {
     this.isGroup = isGroup;
   }
 
-  public User getCreatedBy() {
+  public User getcreatedBy() {
     return this.createdBy;
   }
 
-  public void setCreatedBy(User createdBy) {
+  public void setcreatedBy(User createdBy) {
     this.createdBy = createdBy;
   }
 
