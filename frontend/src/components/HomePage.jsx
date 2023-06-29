@@ -67,7 +67,10 @@ const HomePage = () => {
                   <p>Username</p>
                 </div>
                 <div className="space-x-3 text-2xl flex">
-                  <TbCircleDashed />
+                  <TbCircleDashed
+                    className="cursor-pointer"
+                    onClick={() => navigate("/status")}
+                  />
                   <BiCommentDetail />
                 </div>
               </div>
@@ -101,6 +104,7 @@ const HomePage = () => {
             </div>
           )}
         </div>
+
         {/*default whats up page*/}
         {!currentChat && (
           <div className="w-[70%] flex flex-col items-center justify-center h-full w">
@@ -118,7 +122,6 @@ const HomePage = () => {
             </div>
           </div>
         )}
-
         {/*Message part*/}
 
         {currentChat && (
@@ -151,8 +154,8 @@ const HomePage = () => {
                 ))}
               </div>
             </div>
-            {/* Footer part */}
 
+            {/* Footer part */}
             <div className="footer bg-[#f0f2f5] absolute bottom-0 w-full py-3 text-2xl">
               <div className="flex justify-between items-center px-5 relative">
                 <BsEmojiSmile className="cursor-pointer" />
