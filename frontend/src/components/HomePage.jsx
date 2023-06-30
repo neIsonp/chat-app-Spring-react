@@ -15,6 +15,8 @@ import MessageCard from "./MessageCard/MessageCard";
 import "./HomePage.css";
 import { useNavigate } from "react-router-dom";
 import Profile from "./Profile/Profile";
+import { Button, Menu, MenuItem } from "@mui/material";
+import CreateGroup from "./Group/CreateGroup";
 
 const HomePage = () => {
   const [querys, setQuerys] = useState(null);
@@ -22,12 +24,25 @@ const HomePage = () => {
   const [content, setContent] = useState("");
   const [isProfile, setIsProfile] = useState(false);
   const navigate = useNavigate();
+  const [isGroup, setIsGroup] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleClickOnChatCard = () => {
     setCurrentChat(true);
   };
 
-  const handleSearch = () => [];
+  const handleSearch = () => {};
 
   const handleCreateNewMessage = () => {};
 
@@ -40,17 +55,23 @@ const HomePage = () => {
     setIsProfile(false);
   };
 
+  const handleCreategroup = () => {
+    setIsGroup(true);
+  };
+
   return (
     <div className="relative">
       <div className="w-full py-14 bg-blue-400"></div>
       <div className="flex bg-[#f0f2f5] h-[90vh] absolute left-[2vw] top-[7vh] w-[96vw] rounded-md">
         <div className="left w-[30%] bg-white h-full rounded-md">
+          {/*Profile */}
+          {isGroup && <CreateGroup />}
           {isProfile && (
             <div className="w-full h-full">
               <Profile handleCloseOpenProfile={handleCloseOpenProfile} />
             </div>
           )}
-          {!isProfile && (
+          {!isProfile && !isGroup && (
             <div className="w-full">
               {/* home */}
 
@@ -72,6 +93,31 @@ const HomePage = () => {
                     onClick={() => navigate("/status")}
                   />
                   <BiCommentDetail />
+                  <div>
+                    <BsThreeDotsVertical
+                      className="cursor-pointer"
+                      id="basic-button"
+                      aria-controls={open ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? "true" : undefined}
+                      onClick={handleClick}
+                    />
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleCreategroup}>
+                        Create group
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    </Menu>
+                  </div>
                 </div>
               </div>
 
