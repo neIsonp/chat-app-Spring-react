@@ -3,6 +3,7 @@ import Status from "./components/Status/Status";
 import { Route, Routes } from "react-router-dom";
 import StatusViewer from "./components/Status/StatusViewer";
 import SignIn from "./components/Register/SignIn";
+import SignUp from "./components/Register/SignUp";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/status" element={<Status />} />
         <Route path="/status/:userId" element={<StatusViewer />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </div>
   );
