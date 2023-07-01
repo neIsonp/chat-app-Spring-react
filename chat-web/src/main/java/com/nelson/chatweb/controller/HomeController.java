@@ -10,7 +10,7 @@ public class HomeController {
 
   @GetMapping("/")
   public ResponseEntity<String> HomeController(){
-    return new ResponseEntity<String>("Bem vindo ao nosso chat usando spring boot", HttpStatus.OK);
+    return new ResponseEntity<String>("Welcome to UfoChat", HttpStatus.OK);
   }
   
 }

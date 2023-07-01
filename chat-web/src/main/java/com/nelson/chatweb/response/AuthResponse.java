@@ -10,6 +10,4 @@ public class AuthResponse {
     this.jwt = jwt;
     this.isAuth = isAuth;
   }
-
-
 }

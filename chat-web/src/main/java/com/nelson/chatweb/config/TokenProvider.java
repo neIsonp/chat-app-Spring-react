@@ -6,7 +6,6 @@ import javax.crypto.SecretKey;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -31,10 +30,9 @@ public class TokenProvider {
 
     Claims claim = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             
-    String email =  String.valueOf(claim.get("email"));
+    String email = String.valueOf(claim.get("email"));
 
     return email;
-  }
+  } 
 
-  
 }

@@ -1,5 +1,8 @@
 package com.nelson.chatweb.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,17 +32,20 @@ public class AuthController {
   private TokenProvider tokenProvider;
   private CustomUserService customUserService;
   
-  public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomUserService customUserService){
+  public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenProvider tokenProvider,CustomUserService customUserService){
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.tokenProvider = tokenProvider;
     this.customUserService = customUserService;
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException{
-    String email = user.getEmail();
+  public ResponseEntity<Map<String, Object>> createUserHandler(@RequestBody User user) throws UserException{
     String full_name = user.getFull_name();
+    String email = user.getEmail();
     String password = user.getPassword();
+
+    System.out.println("ESTE É O OBEJTO RECEBIDO" + user);
 
     User isUser = userRepository.findByEmail(email);
 
@@ -57,16 +63,20 @@ public class AuthController {
     Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
     String jwt = tokenProvider.generateToken(authentication);
 
-    AuthResponse response = new AuthResponse(jwt, true);
+    System.out.println("ESTE SUPOSTAMENTE É O TOKEN" + jwt);
 
-    return new ResponseEntity<AuthResponse>(response, HttpStatus.ACCEPTED);
+    Map<String, Object> response = new HashMap<>();
+    response.put("jwt", jwt);
+    response.put("status", true);
+
+    return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 
   }
-  
-  public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest req){
+
+  @PostMapping("/signin")
+  public ResponseEntity<Map<String, Object>> loginHandler(@RequestBody LoginRequest req){
     String email = req.getEmail();
     String password = req.getPassword();
 
@@ -75,9 +85,11 @@ public class AuthController {
 
     String jwt = tokenProvider.generateToken(authentication);
 
-    AuthResponse response = new AuthResponse(jwt, true);
+    Map<String, Object> response = new HashMap<>();
+    response.put("jwt", jwt);
+    response.put("status", true);
 
-    return new ResponseEntity<AuthResponse>(response, HttpStatus.ACCEPTED);
+    return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
   }
 
   public Authentication authenticate(String username, String password){
