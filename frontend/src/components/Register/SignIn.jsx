@@ -1,11 +1,16 @@
 import { Alert, Button, Snackbar } from "@mui/material";
 import { blue } from "@mui/material/colors";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { currentUser, login } from "../../redux/auth/Action";
 
 function SignIn() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  const { auth } = useSelector((store) => store);
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
 
   const [inputData, setInputData] = useState({
     email: "",
@@ -14,15 +19,29 @@ function SignIn() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handle submit");
+    console.log("handle submit", inputData);
     setOpenSnackbar(true);
+    dispatch(login(inputData));
   };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputData((values) => ({ ...values, [name]: value }));
+  };
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
+
+  useEffect(() => {
+    if (token) dispatch(currentUser(token));
+  }, [token]);
+
+  useEffect(() => {
+    if (auth.reqUser?.full_name) {
+      navigate("/");
+    }
+  }, [auth.reqUser]);
 
   return (
     <div>
@@ -37,6 +56,7 @@ function SignIn() {
                 placeholder="Enter your email"
                 onChange={handleChange}
                 value={inputData.email}
+                name="email"
               />
             </div>
             <div>
@@ -47,6 +67,7 @@ function SignIn() {
                 placeholder="Enter your password"
                 onChange={handleChange}
                 value={inputData.password}
+                name="password"
               />
             </div>
             <div>

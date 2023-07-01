@@ -1,11 +1,19 @@
 import { Alert, Button, Snackbar } from "@mui/material";
 import { blue } from "@mui/material/colors";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { currentUser, register } from "../../redux/auth/Action";
+import { store } from "../../redux/store";
 
 function SignUp() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  const { auth } = useSelector((store) => store);
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  console.log("current user", auth.reqUser);
 
   const [inputData, setInputData] = useState({
     full_name: "",
@@ -15,15 +23,29 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("handle submit");
+    console.log("handle submit", inputData);
+    dispatch(register(inputData));
     setOpenSnackbar(true);
   };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputData((values) => ({ ...values, [name]: value }));
+  };
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
+
+  useEffect(() => {
+    if (token) dispatch(currentUser(token));
+  }, [token]);
+
+  useEffect(() => {
+    if (auth.reqUser?.full_name) {
+      navigate("/");
+    }
+  }, [auth.reqUser]);
 
   return (
     <div>

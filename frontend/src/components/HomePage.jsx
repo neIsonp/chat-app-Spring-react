@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TbCircleDashed } from "react-icons/tb";
 import { BiCommentDetail } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -17,18 +17,21 @@ import { useNavigate } from "react-router-dom";
 import Profile from "./Profile/Profile";
 import { Button, Menu, MenuItem } from "@mui/material";
 import CreateGroup from "./Group/CreateGroup";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser, logout } from "../redux/auth/Action";
 
 const HomePage = () => {
   const [querys, setQuerys] = useState(null);
   const [currentChat, setCurrentChat] = useState(null);
   const [content, setContent] = useState("");
   const [isProfile, setIsProfile] = useState(false);
-  const navigate = useNavigate();
   const [isGroup, setIsGroup] = useState(false);
-
   const [anchorEl, setAnchorEl] = useState(null);
-
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
+  const token = localStorage.getItem("token");
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -59,6 +62,21 @@ const HomePage = () => {
     setIsGroup(true);
   };
 
+  useEffect(() => {
+    dispatch(currentUser(token));
+  }, [token]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/signin");
+  };
+
+  useEffect(() => {
+    if (!auth.reqUser) {
+      navigate("/signin");
+    }
+  }, [auth.reqUser]);
+
   return (
     <div className="relative">
       <div className="w-full py-14 bg-blue-400"></div>
@@ -85,7 +103,7 @@ const HomePage = () => {
                     src="https://cdn.pixabay.com/photo/2023/06/13/15/05/astronaut-8061095_640.png"
                     alt=""
                   />
-                  <p>Username</p>
+                  <p>{auth.reqUser?.full_name}</p>
                 </div>
                 <div className="space-x-3 text-2xl flex">
                   <TbCircleDashed
@@ -115,7 +133,7 @@ const HomePage = () => {
                       <MenuItem onClick={handleCreategroup}>
                         Create group
                       </MenuItem>
-                      <MenuItem onClick={handleClose}>Logout</MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>
                   </div>
                 </div>
