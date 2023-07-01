@@ -2,6 +2,7 @@ package com.nelson.chatweb.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.web.server.ServerHttpSecurity.HttpsRedirectSpec;
@@ -29,6 +30,7 @@ import com.nelson.chatweb.service.UserService;
 public class MessageController {
 
   private UserService userService;
+
   private MessageService messageService;
 
   public MessageController(UserService userService, MessageService messageService){
