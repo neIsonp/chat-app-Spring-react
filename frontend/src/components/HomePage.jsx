@@ -70,9 +70,13 @@ const HomePage = () => {
   }, [chat.createChat, chat.CreateGroup]);
 
   useEffect(() => {
-    if (currentChat?.id) {
-      dispatch(getAllMessages({ chatId: currentChat.id, token }));
-    }
+    const interval = setInterval(() => {
+      if (currentChat?.id) {
+        dispatch(getAllMessages({ chatId: currentChat.id, token }));
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
   }, [currentChat, message.newMessage]);
 
   const handleNavigate = () => {
