@@ -1,7 +1,7 @@
 import { CREATE_CHAT, CREATE_GROUP, GET_USERS_CHAT } from "./ActionType";
 
 const initialValue = {
-  chats: null,
+  chats: [],
   createdGroup: null,
   createdChat: null,
 };

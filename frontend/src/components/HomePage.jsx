@@ -18,7 +18,8 @@ import Profile from "./Profile/Profile";
 import { Button, Menu, MenuItem } from "@mui/material";
 import CreateGroup from "./Group/CreateGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser, logout } from "../redux/auth/Action";
+import { currentUser, logout, searchUser } from "../redux/auth/Action";
+import { createChat, getUsersChat } from "../redux/chat/Action";
 
 const HomePage = () => {
   const [querys, setQuerys] = useState(null);
@@ -30,7 +31,7 @@ const HomePage = () => {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { auth } = useSelector((store) => store);
+  const { auth, chat, message } = useSelector((store) => store);
   const token = localStorage.getItem("token");
 
   const handleClick = (e) => {
@@ -41,13 +42,23 @@ const HomePage = () => {
     setAnchorEl(null);
   };
 
-  const handleClickOnChatCard = () => {
-    setCurrentChat(true);
+  const handleClickOnChatCard = (userId) => {
+    // setCurrentChat(item);
+    // console.log(userID, "----", item);
+    // console.log(userId);
+    dispatch(createChat({ token, data: { userId } }));
+    setQuerys("");
   };
 
-  const handleSearch = () => {};
+  const handleSearch = (keyword) => {
+    dispatch(searchUser({ keyword, token }));
+  };
 
   const handleCreateNewMessage = () => {};
+
+  useEffect(() => {
+    dispatch(getUsersChat({ token }));
+  }, [chat.createChat, chat.CreateGroup]);
 
   const handleNavigate = () => {
     // navigate("/profile");
@@ -158,10 +169,61 @@ const HomePage = () => {
               {/*all users will show here*/}
               <div className="bg-white overflow-scroll h-[72vh] px-3">
                 {querys &&
-                  [1, 1, 1].map((item) => (
-                    <div onClick={handleClickOnChatCard}>
+                  Array.isArray(auth.searchUser) &&
+                  auth.searchUser.map((item) => (
+                    <div onClick={() => handleClickOnChatCard(item.id)}>
                       <hr />
-                      <ChatCard />
+                      <ChatCard
+                        name={item.full_name}
+                        userImg={
+                          item.profile_picture ||
+                          "https://img.freepik.com/free-vector/cute-astronaut-alien-sitting-with-peace-hand-cartoon-vector-icon-illustration-science-techno_138676-6748.jpg"
+                        }
+                      />
+                    </div>
+                  ))}
+                {chat.chats.length > 0 &&
+                  !querys &&
+                  Array.isArray(chat.chats) &&
+                  chat.chats.map((item) => (
+                    <div onClick={() => handleClickOnChatCard(item.id)}>
+                      <hr />
+                      {item.is_group ? (
+                        <ChatCard
+                          name={item.chat_name}
+                          userImg={
+                            item.chat_image ||
+                            "https://img.freepik.com/free-vector/cute-astronaut-alien-sitting-with-peace-hand-cartoon-vector-icon-illustration-science-techno_138676-6748.jpg"
+                          }
+                        />
+                      ) : (
+                        <ChatCard
+                          isChat={true}
+                          name={
+                            auth.reqUser?.id !== item.users[0]?.id
+                              ? item.users[0].full_name
+                              : item.users[1].full_name
+                          }
+                          userImg={
+                            auth.reqUser.id !== item.users[0].id
+                              ? item.users[0].profile_picture ||
+                                "https://cdn3.iconfinder.com/data/icons/halloween-2278/512/halloween_avatar_costume_masquerade-36-512.png"
+                              : item.users[1].profile_picture ||
+                                "https://cdn3.iconfinder.com/data/icons/halloween-2278/512/halloween_avatar_costume_masquerade-36-512.png"
+                          }
+                          // notifications={notifications.length}
+                          // isNotification={
+                          //   notifications[0]?.chat?.id === item.id
+                          // }
+                          // message={
+                          //   (item.id ===
+                          //     messages[messages.length - 1]?.chat?.id &&
+                          //     messages[messages.length - 1]?.content) ||
+                          //   (item.id === notifications[0]?.chat?.id &&
+                          //     notifications[0]?.content)
+                          // }
+                        />
+                      )}
                     </div>
                   ))}
               </div>

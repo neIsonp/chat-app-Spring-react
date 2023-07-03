@@ -77,19 +77,16 @@ export const currentUser = (token) => async (dispatch) => {
 
 export const searchUser = (data) => async (dispatch) => {
   try {
-    const response = await fetch(
-      `${BASE_API_URL}/api/users/search?name=${data.keryword}`,
-      {
-        method: "GET",
-        headers: {
-          "content-Type": "application/json",
-          Authorization: `Bearer ${data.token}`,
-        },
-      }
-    );
+    const response = await fetch(`${BASE_API_URL}/api/users/${data.keyword}`, {
+      method: "GET",
+      headers: {
+        "content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      },
+    });
 
     const resData = await response.json();
-    console.log("searchUser", resData);
+    console.log("search User", resData);
     dispatch({ type: SEARCH_USER, payload: resData });
   } catch (error) {
     console.log(error);
