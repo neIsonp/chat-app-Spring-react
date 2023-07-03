@@ -71,7 +71,9 @@ function SignIn() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
-              className="p-2 mt-8 rounded-xl border"
+              className={`p-2 mt-8 rounded-xl border ${
+                errors.email ? "border-red-500" : ""
+              }`}
               type="email"
               placeholder="Email"
               onChange={handleChange}
@@ -83,7 +85,9 @@ function SignIn() {
             )}
             <div className="relative">
               <input
-                className="p-2 rounded-xl border w-full"
+                className={`p-2 rounded-xl border w-full ${
+                  errors.password ? "border-red-500" : ""
+                }`}
                 type={viewPassword ? "password" : "text"}
                 placeholder="Password"
                 onChange={handleChange}
@@ -91,12 +95,12 @@ function SignIn() {
                 name="password"
               />
               <div
-                className="bi bi-eye absolute top-1/2 right-3 -translate-y-1/2"
+                className="bi bi-eye absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
                 onClick={() =>
                   setViewPassword((prevState) => (prevState = !prevState))
                 }
               >
-                {viewPassword ? <FiEyeOff /> : <FiEye />}
+                {viewPassword ? <FiEye /> : <FiEyeOff />}
               </div>
             </div>
             {errors.password && (
@@ -127,6 +131,16 @@ function SignIn() {
           src="https://assets7.lottiefiles.com/packages/lf20_l4ny0jjm.json"
         ></Player>
       </div>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="error">
+          Invalid credentials. Please try again.
+        </Alert>
+      </Snackbar>
     </section>
   );
 }

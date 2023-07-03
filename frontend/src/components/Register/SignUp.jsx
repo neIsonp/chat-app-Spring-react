@@ -3,7 +3,11 @@ import { blue } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { currentUser, register } from "../../redux/auth/Action";
+import {
+  checkEmailExists,
+  currentUser,
+  register,
+} from "../../redux/auth/Action";
 import { FiEyeOff, FiEye } from "react-icons/fi";
 import { Player } from "@lottiefiles/react-lottie-player";
 
@@ -64,6 +68,23 @@ function SignUp() {
     }
   }, [auth.reqUser]);
 
+  const handleEmailBlur = async (e) => {
+    const { value } = e.target;
+    const exists = await dispatch(checkEmailExists(value));
+
+    if (exists) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Email is already in use",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "",
+      }));
+    }
+  };
+
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center">
@@ -75,7 +96,9 @@ function SignUp() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
-              className="p-2 mt-8 rounded-xl border"
+              className={`p-2 mt-8 rounded-xl border ${
+                errors.full_name ? "border-red-500" : ""
+              }`}
               placeholder="Username"
               name="full_name"
               onChange={(e) => handleChange(e)}
@@ -85,11 +108,14 @@ function SignUp() {
               <span className="text-red-500 text-sm">{errors.full_name}</span>
             )}
             <input
-              className="p-2 rounded-xl border"
+              className={`p-2 rounded-xl border ${
+                errors.email ? "border-red-500" : ""
+              }`}
               type="email"
               placeholder="Email"
               name="email"
               onChange={(e) => handleChange(e)}
+              onBlur={handleEmailBlur}
               value={inputData.email}
             />
             {errors.email && (
@@ -97,7 +123,9 @@ function SignUp() {
             )}
             <div className="relative">
               <input
-                className="p-2 rounded-xl border w-full"
+                className={`p-2 rounded-xl border ${
+                  errors.password ? "border-red-500" : ""
+                } w-full`}
                 type={viewPassword ? "password" : "text"}
                 placeholder="Password"
                 name="password"

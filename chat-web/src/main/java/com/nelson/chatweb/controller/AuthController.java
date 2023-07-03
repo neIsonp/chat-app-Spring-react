@@ -26,13 +26,13 @@ import com.nelson.chatweb.service.CustomUserService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-  
   private UserRepository userRepository;
   private PasswordEncoder passwordEncoder;
   private TokenProvider tokenProvider;
   private CustomUserService customUserService;
-  
-  public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenProvider tokenProvider,CustomUserService customUserService){
+
+  public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, TokenProvider tokenProvider,
+      CustomUserService customUserService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.tokenProvider = tokenProvider;
@@ -40,7 +40,7 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<Map<String, Object>> createUserHandler(@RequestBody User user) throws UserException{
+  public ResponseEntity<Map<String, Object>> createUserHandler(@RequestBody User user) throws UserException {
     String full_name = user.getFull_name();
     String email = user.getEmail();
     String password = user.getPassword();
@@ -49,7 +49,7 @@ public class AuthController {
 
     User isUser = userRepository.findByEmail(email);
 
-    if(isUser != null){
+    if (isUser != null) {
       throw new UserException("Email is user with another account " + email);
     }
 
@@ -72,11 +72,10 @@ public class AuthController {
     response.put("status", true);
 
     return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-
   }
 
   @PostMapping("/signin")
-  public ResponseEntity<Map<String, Object>> loginHandler(@RequestBody LoginRequest req){
+  public ResponseEntity<Map<String, Object>> loginHandler(@RequestBody LoginRequest req) {
     String email = req.getEmail();
     String password = req.getPassword();
 
@@ -92,17 +91,48 @@ public class AuthController {
     return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
   }
 
-  public Authentication authenticate(String username, String password){
+  public Authentication authenticate(String username, String password) {
     UserDetails userDetails = customUserService.loadUserByUsername(username);
 
-    if(userDetails == null){
+    if (userDetails == null) {
       throw new BadCredentialsException("Invalid username");
     }
 
-    if(!passwordEncoder.matches(password, userDetails.getPassword())){
+    if (!passwordEncoder.matches(password, userDetails.getPassword())) {
       throw new BadCredentialsException("Invalid username or password");
     }
-    
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }
-} 
+
+  @PostMapping("/check-email")
+  public ResponseEntity<Map<String, Boolean>> checkEmailExists(@RequestBody Map<String, String> request) {
+    String email = request.get("email");
+    User existingUser = userRepository.findByEmail(email);
+    boolean exists = existingUser != null;
+
+    Map<String, Boolean> response = new HashMap<>();
+    response.put("exists", exists);
+
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/check-credentials")
+  public ResponseEntity<Map<String, Object>> checkCredentials(@RequestBody Map<String, String> request) {
+    String email = request.get("email");
+    String password = request.get("password");
+
+    User existingUser = userRepository.findByEmail(email);
+
+    Map<String, Object> response = new HashMap<>();
+
+    if (existingUser != null && passwordEncoder.matches(password, existingUser.getPassword())) {
+      response.put("valid", true);
+    } else {
+      response.put("valid", false);
+      response.put("message", "Invalid credentials");
+    }
+
+    return ResponseEntity.ok(response);
+  }
+
+}

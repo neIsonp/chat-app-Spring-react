@@ -114,6 +114,25 @@ export const updateUser = (data) => async (dispatch) => {
   }
 };
 
+export const checkEmailExists = (email) => async (dispatch) => {
+  try {
+    const response = await fetch(`${BASE_API_URL}/auth/check-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const resData = await response.json();
+    console.log("checkEmailExists", resData);
+    return resData.exists;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 export const logout = () => async (dispatch) => {
   localStorage.removeItem("token");
   dispatch({ type: LOGOUT, payload: null });
