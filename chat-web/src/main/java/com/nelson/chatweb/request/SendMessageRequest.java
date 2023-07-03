@@ -10,6 +10,14 @@ public class SendMessageRequest {
 
   }
 
+  public SendMessageRequest(Integer userId, Integer chatId, String content){
+    super();
+    this.userId = userId;
+    this.chatId = chatId;
+    this.content = content;
+
+  }
+
   public Integer getUserId() {
     return this.userId;
   }

@@ -20,6 +20,7 @@ import CreateGroup from "./Group/CreateGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout, searchUser } from "../redux/auth/Action";
 import { createChat, getUsersChat } from "../redux/chat/Action";
+import { createMessage, getAllMessages } from "../redux/message/Action";
 
 const HomePage = () => {
   const [querys, setQuerys] = useState(null);
@@ -54,11 +55,25 @@ const HomePage = () => {
     dispatch(searchUser({ keyword, token }));
   };
 
-  const handleCreateNewMessage = () => {};
+  const handleCreateNewMessage = () => {
+    dispatch(
+      createMessage({
+        token,
+        data: { chatId: currentChat.id, content: content },
+      })
+    );
+    console.log("created new message");
+  };
 
   useEffect(() => {
     dispatch(getUsersChat({ token }));
   }, [chat.createChat, chat.CreateGroup]);
+
+  useEffect(() => {
+    if (currentChat?.id) {
+      dispatch(getAllMessages({ chatId: currentChat.id, token }));
+    }
+  }, [currentChat, message.newMessage]);
 
   const handleNavigate = () => {
     // navigate("/profile");
@@ -87,6 +102,12 @@ const HomePage = () => {
       navigate("/signin");
     }
   }, [auth.reqUser]);
+
+  const handleCurrentChat = (item) => {
+    setCurrentChat(item);
+  };
+
+  console.log(currentChat);
 
   return (
     <div className="relative">
@@ -177,7 +198,7 @@ const HomePage = () => {
                         name={item.full_name}
                         userImg={
                           item.profile_picture ||
-                          "https://img.freepik.com/free-vector/cute-astronaut-alien-sitting-with-peace-hand-cartoon-vector-icon-illustration-science-techno_138676-6748.jpg"
+                          "https://img.freepik.com/free-vector/cute-alien-riding-ufo-with-love-sign-cartoon-vector-icon-illustration-science-technology-icon-concept-isolated-premium-vector-flat-cartoon-style_138676-3810.jpg?w=2000"
                         }
                       />
                     </div>
@@ -186,7 +207,7 @@ const HomePage = () => {
                   !querys &&
                   Array.isArray(chat.chats) &&
                   chat.chats.map((item) => (
-                    <div onClick={() => handleClickOnChatCard(item.id)}>
+                    <div onClick={() => handleCurrentChat(item)}>
                       <hr />
                       {item.is_group ? (
                         <ChatCard
@@ -257,10 +278,25 @@ const HomePage = () => {
                 <div className="py-3 space-x-4 flex items-center px-3">
                   <img
                     className="w-10 h-10 rounded-full"
-                    src="https://cdn.pixabay.com/photo/2023/06/11/12/03/lynx-8055805_640.jpg"
+                    src={
+                      currentChat.isGroup
+                        ? currentChat.chat_image ||
+                          "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_640.png"
+                        : auth.reqUser.id !== currentChat.users[0].id
+                        ? currentChat.users[0].profile_picture ||
+                          "https://cdn3.iconfinder.com/data/icons/halloween-2278/512/halloween_avatar_costume_masquerade-36-512.png"
+                        : currentChat.users[1].profile_picture ||
+                          "https://cdn3.iconfinder.com/data/icons/halloween-2278/512/halloween_avatar_costume_masquerade-36-512.png"
+                    }
                     alt=""
                   />
-                  <p>username</p>
+                  <p>
+                    {currentChat.is_group
+                      ? currentChat.chat_name
+                      : auth.reqUser?.id === currentChat.users[0].id
+                      ? currentChat.users[1].full_name
+                      : currentChat.users[0].full_name}
+                  </p>
                 </div>
                 <div className="py-3 flex space-x-4 items-center px-3">
                   <AiOutlineSearch />
@@ -272,12 +308,13 @@ const HomePage = () => {
             {/* message section*/}
             <div className="px-10 h-[85vh] overflow-y-scroll bg-blue-200">
               <div className="space-y-1 flex flex-col justify-center mt-20 py-2">
-                {[1, 1, 1, 1].map((item, i) => (
-                  <MessageCard
-                    isReqUserMessage={i % 2 === 0}
-                    content={"message"}
-                  />
-                ))}
+                {message.messages.length > 0 &&
+                  message.messages?.map((item, i) => (
+                    <MessageCard
+                      isReqUserMessage={item.user.id !== auth.reqUser.id}
+                      content={item.content}
+                    />
+                  ))}
               </div>
             </div>
             {/* Footer part */}

@@ -34,7 +34,7 @@ export const getAllMessages = (reqData) => async (dispatch) => {
     );
 
     const data = await response.json();
-    console.log("create message", data);
+    console.log("get all messages", data);
     dispatch({ type: GET_ALL_MESSAGE, payload: data });
   } catch (error) {
     console.log("catch error while creating a new message" + error);

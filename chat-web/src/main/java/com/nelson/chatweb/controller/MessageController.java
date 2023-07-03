@@ -42,7 +42,9 @@ public class MessageController {
   public ResponseEntity<Message> sendMessageHandler(@RequestBody SendMessageRequest req, @RequestHeader("Authorization") String jwt) throws UserException, ChatException{
     
     User user = userService.findUserProfile(jwt);
+    
     req.setUserId(user.getId());
+
     Message message = messageService.sendMessage(req);
 
     return new ResponseEntity<Message>(message, HttpStatus.OK);
