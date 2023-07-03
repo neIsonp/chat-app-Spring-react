@@ -9,7 +9,6 @@ public class SingleChatRequest {
     this.userId = userId;
   }
 
-
   public Integer getUserId() {
     return this.userId;
   }
@@ -17,6 +16,4 @@ public class SingleChatRequest {
   public void setUserId(Integer userId) {
     this.userId = userId;
   }
-
-  
 }

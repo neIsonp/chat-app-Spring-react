@@ -40,8 +40,10 @@ public class ChatServiceImplementation implements ChatService {
     chat.getUsers().add(user);
     chat.getUsers().add(reqUser);
     chat.setIsGroup(false);
+
+    Chat savedChat = chatRepository.save(chat);
      
-    return chat;
+    return savedChat;
   }
 
   @Override
@@ -142,9 +144,7 @@ public class ChatServiceImplementation implements ChatService {
         }
 
       }
-      
       throw new UserException("You can't remove another user");
-      
     }
 
     throw new ChatException("Chat not found with id" + chatId);

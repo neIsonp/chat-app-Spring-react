@@ -1,6 +1,7 @@
 package com.nelson.chatweb.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +38,19 @@ public class ChatController {
   }
 
   @PostMapping("/single")
-  public ResponseEntity<Chat> createChatHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization") String jwt) throws UserException{
+  public ResponseEntity<Chat> createChatHandler(@RequestBody Map<String, Integer> requestBody, @RequestHeader("Authorization") String jwt) throws UserException {
 
-    User reqUser = userService.findUserProfile(jwt);
+      Integer userId = requestBody.get("userId");
+      System.out.println("Received user ID: " + userId);
+      System.out.println("recebendo isso aqui" + requestBody);
 
-    Chat chat = chatService.createChat(reqUser, singleChatRequest.getUserId());
+      User reqUser = userService.findUserProfile(jwt);
+      Chat chat = chatService.createChat(reqUser, userId);
 
-    return new ResponseEntity<Chat>(chat,HttpStatus.OK);
+      return new ResponseEntity<>(chat, HttpStatus.OK);
+
   }
+
 
   @PostMapping("/group")
   public ResponseEntity<Chat> createGroupHandler(@RequestBody GroupChatRequest req, @RequestHeader("Authorization") String jwt) throws UserException{
