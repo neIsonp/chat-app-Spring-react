@@ -116,7 +116,7 @@ const HomePage = () => {
   return (
     <div className="relative">
       <div className="w-full py-14 bg-blue-400"></div>
-      <div className="flex bg-[#f0f2f5] h-[90vh] absolute left-[2vw] top-[7vh] w-[96vw] rounded-md">
+      <div className="flex bg-[#f0f2f5] h-[90vh] absolute left-[2vw] top-[7vh] w-[96vw] p-1 rounded-md">
         <div className="left w-[30%] bg-white h-full rounded-md">
           {/*Profile */}
           {isGroup && <CreateGroup />}
@@ -136,7 +136,10 @@ const HomePage = () => {
                 >
                   <img
                     className="rounded-full w-10 h-10 cursor-pointer"
-                    src="https://cdn.pixabay.com/photo/2023/06/13/15/05/astronaut-8061095_640.png"
+                    src={
+                      auth?.reqUser?.profile_picture ||
+                      "https://cdn.pixabay.com/photo/2023/06/13/15/05/astronaut-8061095_640.png"
+                    }
                     alt=""
                   />
                   <p>{auth.reqUser?.full_name}</p>
@@ -165,7 +168,7 @@ const HomePage = () => {
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleNavigate}>Profile</MenuItem>
                       <MenuItem onClick={handleCreategroup}>
                         Create group
                       </MenuItem>

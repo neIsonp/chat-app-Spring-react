@@ -13,42 +13,42 @@ import com.nelson.chatweb.repository.UserRepository;
 import com.nelson.chatweb.request.UpdateUserRequest;
 
 @Service
-public class UserServiceImplementation implements UserService{
-  
+public class UserServiceImplementation implements UserService {
+
   private UserRepository userRepository;
   private TokenProvider tokenProvider;
 
-  public UserServiceImplementation(UserRepository userRepository, TokenProvider tokenProvider){
+  public UserServiceImplementation(UserRepository userRepository, TokenProvider tokenProvider) {
     this.userRepository = userRepository;
     this.tokenProvider = tokenProvider;
   }
 
   @Override
   public User findUserById(Integer id) throws UserException {
-    Optional<User> opt= userRepository.findById(id);
+    Optional<User> opt = userRepository.findById(id);
 
-    if(opt.isPresent()){
+    if (opt.isPresent()) {
       return opt.get();
     }
 
-    throw new UserException("user not found with id + "+  id);
+    throw new UserException("user not found with id + " + id);
   }
 
   @Override
-  public User findUserProfile(String jwt) throws UserException{
+  public User findUserProfile(String jwt) throws UserException {
 
     String email = tokenProvider.getEmailFromToken(jwt);
 
-    if(email == null){
+    if (email == null) {
       throw new BadCredentialsException("received invalid token ");
     }
 
     User user = userRepository.findByEmail(email);
 
-    if(user == null){
+    if (user == null) {
       throw new UserException("User not found with email" + email);
     }
-    
+
     return user;
   }
 
@@ -56,11 +56,11 @@ public class UserServiceImplementation implements UserService{
   public User updateUser(Integer userId, UpdateUserRequest req) throws UserException {
     User user = findUserById(userId);
 
-    if(req.getFull_name() != null){
+    if (req.getFull_name() != null) {
       user.setFull_name(req.getFull_name());
     }
 
-    if(req.getProfile_picture() != null){
+    if (req.getProfile_picture() != null) {
       user.setProfile_picture(req.getProfile_picture());
     }
 

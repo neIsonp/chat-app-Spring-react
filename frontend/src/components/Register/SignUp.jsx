@@ -133,12 +133,12 @@ function SignUp() {
                 value={inputData.password}
               />
               <div
-                className="bi bi-eye absolute top-1/2 right-3 -translate-y-1/2"
+                className="bi bi-eye absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
                 onClick={() =>
                   setViewPassword((prevState) => (prevState = !prevState))
                 }
               >
-                {viewPassword ? <FiEyeOff /> : <FiEye />}
+                {viewPassword ? <FiEye /> : <FiEyeOff />}
               </div>
             </div>
             {errors.password && (

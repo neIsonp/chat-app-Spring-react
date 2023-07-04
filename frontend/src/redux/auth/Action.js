@@ -95,16 +95,14 @@ export const searchUser = (data) => async (dispatch) => {
 
 export const updateUser = (data) => async (dispatch) => {
   try {
-    const response = await fetch(
-      `${BASE_API_URL}/api/users/update/${data.id}`,
-      {
-        method: "GET",
-        headers: {
-          "content-Type": "application/json",
-          Authorization: `Bearer ${data.token}`,
-        },
-      }
-    );
+    const response = await fetch(`${BASE_API_URL}/api/users/update`, {
+      method: "PUT",
+      headers: {
+        "content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      },
+      body: JSON.stringify(data.data),
+    });
 
     const resData = await response.json();
     console.log("updateUser", resData);

@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { BsArrowLeft, BsCheck2, BsPencil } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../redux/auth/Action";
+import { upload } from "@testing-library/user-event/dist/upload";
 
 function Profile({ handleCloseOpenProfile }) {
   const [flag, setFlag] = useState(false);
   const [username, setUsername] = useState(null);
+  const [tempPicture, setTempPicture] = useState(null);
+  const { auth } = useSelector((store) => store);
+  const dispatch = useDispatch();
 
   const handleFlag = () => {
     setFlag(true);
@@ -15,6 +21,33 @@ function Profile({ handleCloseOpenProfile }) {
 
   const handleChange = (e) => {
     setUsername(e.target.value);
+  };
+
+  const uploadToCloud = (pics) => {
+    const data = new FormData();
+
+    data.append("file", pics);
+    data.append("upload_preset", "ufochat");
+    data.append("cloud_name", "dcwu97ie4");
+
+    fetch("https://api.cloudinary.com/v1_1/dcwu97ie4/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((dataa) => {
+        console.log("imgUrl", dataa);
+        setTempPicture(dataa.url.toString());
+        // setMessage("profile image updated!");
+        // setOpen(true);
+        const data = {
+          id: auth.reqUser.id,
+          token: localStorage.getItem("token"),
+          data: { profile_picture: dataa.url.toString() },
+        };
+
+        dispatch(updateUser(data));
+      });
   };
 
   return (
@@ -30,12 +63,22 @@ function Profile({ handleCloseOpenProfile }) {
       <div className="flex flex-col justify-center items-center my-12">
         <label htmlFor="imgInput">
           <img
-            className="rounded-full w-[15vw] h-[vw] cursor-pointer"
-            src="https://cdn.pixabay.com/photo/2022/03/10/13/59/astronaut-7059915_1280.png"
+            className="cursor-pointer"
+            src={
+              tempPicture ||
+              "https://cdn3.iconfinder.com/data/icons/halloween-2278/512/halloween_avatar_costume_masquerade-36-512.png"
+            }
             alt=""
+            style={{ borderRadius: "50%", width: "20vw", height: "20vw" }}
           />
         </label>
-        <input type="file" name="" id="imgInput" className="hidden" />
+        <input
+          onChange={(e) => uploadToCloud(e.target.files[0])}
+          type="file"
+          name=""
+          id="imgInput"
+          className="hidden"
+        />
       </div>
 
       {/*Name Section */}

@@ -24,16 +24,16 @@ public class UserController {
 
   private UserService userService;
 
-  public UserController(UserService userService){
+  public UserController(UserService userService) {
     this.userService = userService;
   }
 
   @GetMapping("/profile")
-  public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String token) throws UserException{
+  public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String token) throws UserException {
 
     User user = userService.findUserProfile(token);
 
-    return new ResponseEntity<User>(user,HttpStatus.ACCEPTED);
+    return new ResponseEntity<User>(user, HttpStatus.ACCEPTED);
   }
 
   @GetMapping("/{query}")
@@ -41,11 +41,12 @@ public class UserController {
 
     List<User> users = userService.searchUser(query);
 
-    return new ResponseEntity<List<User>>(users,HttpStatus.OK);
+    return new ResponseEntity<List<User>>(users, HttpStatus.OK);
   }
 
   @PutMapping("/update")
-  public ResponseEntity<ApiResponse> updateUserHandler(@RequestBody UpdateUserRequest req, @RequestHeader("Authorization") String token) throws UserException{
+  public ResponseEntity<ApiResponse> updateUserHandler(@RequestBody UpdateUserRequest req,
+      @RequestHeader("Authorization") String token) throws UserException {
 
     User user = userService.findUserProfile(token);
 
@@ -55,5 +56,5 @@ public class UserController {
 
     return new ResponseEntity<ApiResponse>(res, HttpStatus.ACCEPTED);
   }
-  
+
 }
