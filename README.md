@@ -10,7 +10,6 @@ This Chat Web application built using Spring Boot and React.
 - [Dependencies](#dependencies)
 - [Building and Running the Application](#building-and-running-the-application)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Description
 
